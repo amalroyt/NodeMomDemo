@@ -12,7 +12,9 @@ var express = require('express'),
   sequelize = require('./routes/dbconfiguration').sequelize,
   config = require('./routes/dbresources'),
   authorization = require('./routes/authorization_src'),
-  meeting = require('./routes/meeting');
+  meeting = require('./routes/meeting'),
+  discussion = require('./routes/discussion'),
+  action = require('./routes/action');
 
 
 app.use(cookieParser());
@@ -22,12 +24,14 @@ app.use(bodyParser.urlencoded({
 })); // for parsing application/x-www-form-urlencoded
 app.use(express.static(__dirname + '/dist'));
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/dist', 'index.html'));
-});
+// app.get('/', function(req, res) {
+//   res.sendFile(path.join(__dirname + '/dist', 'index.html'));
+// });
 
 app.post('/login', authorization.preAuthorization);
 app.post('/meetingList',meeting.meetingList);
+app.post('/discussion',discussion.discussionPoints);
+app.post('/action',action.actionItems);
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
