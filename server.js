@@ -15,7 +15,7 @@ var express = require('express'),
   meeting = require('./routes/meeting'),
   discussion = require('./routes/discussion'),
   action = require('./routes/action');
-
+  address   =  require('./routes/createmeet');
 
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
@@ -32,7 +32,7 @@ app.post('/login', authorization.preAuthorization);
 app.post('/meetingList',meeting.meetingList);
 app.post('/discussion',discussion.discussionPoints);
 app.post('/action',action.actionItems);
-
+app.post('/postMeeting',address.postMeeting);
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
 });
