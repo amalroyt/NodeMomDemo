@@ -12,7 +12,8 @@ var express = require('express'),
   sequelize = require('./routes/dbconfiguration').sequelize,
   config = require('./routes/dbresources'),
   authorization = require('./routes/authorization_src'),
-  meeting = require('./routes/meeting');
+  meeting = require('./routes/meeting'),
+  moreDetails = require('./routes/moreDetails');
 
 
 app.use(cookieParser());
@@ -28,6 +29,8 @@ app.get('/', function(req, res) {
 
 app.post('/login', authorization.preAuthorization);
 app.post('/meetingList',meeting.meetingList);
+app.post('/moreDetailsPoints',moreDetails.moreDetailsPoints);
+app.post('/moreDetailsAction',moreDetails.moreDetailsAction);
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
