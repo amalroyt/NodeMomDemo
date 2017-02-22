@@ -16,7 +16,12 @@ var express = require('express'),
   discussion = require('./routes/discussion'),
   action = require('./routes/action');
 
-
+  app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });
+    
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
@@ -32,6 +37,12 @@ app.post('/login', authorization.preAuthorization);
 app.post('/meetingList',meeting.meetingList);
 app.post('/discussion',discussion.discussionPoints);
 app.post('/action',action.actionItems);
+app.get('/getTypes',discussion.getTypes);
+app.get('/getUserNames',discussion.getUserNames);
+
+app.get('/getMeetingId',action.getMeetingId);
+app.get('/getUserNames',action.getUserNames);
+app.get('/getStatus',action.getStatus);
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
