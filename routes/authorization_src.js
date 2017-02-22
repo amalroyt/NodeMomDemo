@@ -3,8 +3,8 @@ var sequelize = require("./dbconfiguration").sequelize,
 
 exports.preAuthorization = function(req, res) {
   //Declaring and initializing variables
-  var name = req.get('userName'); //req.body.userName;
-  var password = req.get('userPassword'); //req.body.userPassword;
+  var name = req.body.userName;
+  var password = req.body.userPassword;
   var user;
   //Use query method to get the data from sever
   sequelize.query(" SELECT * FROM domo_users WHERE userName = '" + name + "' AND password = '" + password + "' LIMIT 1 ", {
@@ -39,10 +39,8 @@ exports.preAuthorization = function(req, res) {
               type: sequelize.QueryTypes.INSERT
             }).then(function(users) {})
             //Setting token in the response.
-          res.set('token', token);
-          res.status(200);
-          res.send();
-
+            //res.set({'access_token':token});
+          res.status(200).send(newToken);
         } else {
           res.status(401);
           res.send();
