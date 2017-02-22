@@ -49,9 +49,16 @@ app.put('/checkExcel', check.checkExcel);
 app.get('/download/:meetingTitle', download.downloadExcel);
 app.post('/discussion',discussion.discussionPoints);
 app.post('/action',action.actionItems);
+app.get('/getTypes',discussion.getTypes);
+app.get('/getUserNames',discussion.getUserNames);
+
+app.get('/getMeetingId',action.getMeetingId);
+app.get('/getUserNames',action.getUserNames);
+app.get('/getStatus',action.getStatus);
+
 app.post('/postMeeting',address.postMeeting);
 app.get('/getMeeting/:id',address.getMeeting);
-app.get('/getTypes',address.getTypes);
+app.get('/getMeetingTypes',address.getMeetingTypes);
 app.get('/getAttendees',address.getAttendees);
 app.get('/getFaci',address.getFaci);
 app.get('/getRec',address.getRec);
