@@ -4,7 +4,7 @@ var sequelize = require("./dbconfiguration").sequelize; //import sequelize datab
 //This function will write the data to the database using INSERT statement.
 exports.discussionPoints = function(req, res) {
     var user = {
-      id: 10,
+      id: 22,
       meetingId: 1,
       discussionBy: 2,
       discussionType: 1,

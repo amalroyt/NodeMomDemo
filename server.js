@@ -13,8 +13,12 @@ var express = require('express'),
   config = require('./routes/dbresources'),
   authorization = require('./routes/authorization_src'),
   meeting = require('./routes/meeting'),
+  moreDetails = require('./routes/moreDetails'),
   discussion = require('./routes/discussion'),
   action = require('./routes/action');
+
+
+
   address   =  require('./routes/createmeet'),
    moreDetails = require('./routes/moreDetails');
    
@@ -24,6 +28,7 @@ var express = require('express'),
     next();
   });
    
+
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
@@ -37,6 +42,8 @@ app.use(express.static(__dirname + '/dist'));
 
 app.post('/login', authorization.preAuthorization);
 app.post('/meetingList',meeting.meetingList);
+app.post('/moreDetailsPoints',moreDetails.moreDetailsPoints);
+app.post('/moreDetailsAction',moreDetails.moreDetailsAction);
 app.post('/discussion',discussion.discussionPoints);
 app.post('/action',action.actionItems);
 app.post('/postMeeting',address.postMeeting);
