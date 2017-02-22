@@ -1,7 +1,7 @@
 var fs = require('fs');
 var sequelize = require("./dbconfiguration").sequelize; //import sequelize database object
 
-exports.getTypes = function(req, res) {
+exports.getMeetingTypes = function(req, res) {
 	var query_status = "SELECT * FROM domo_meeting_type";
 	sequelize.query(query_status, {
         type: sequelize.QueryTypes.SELECT
