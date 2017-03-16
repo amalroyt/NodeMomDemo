@@ -12,14 +12,17 @@ var express = require('express'),
   sequelize = require('./routes/dbconfiguration').sequelize,
   config = require('./routes/dbresources'),
   authorization = require('./routes/authorization_src'),
+  checkingToken = require('./routes/checkingToken'),
   meetingList = require('./routes/meetingList'),
   moreDetails = require('./routes/moreDetails'),
   generate = require('./routes/generateExcel'),
   check = require('./routes/checkExcel'),
   download = require('./routes/downloadExcel'),
+  deleteMeet = require('./routes/deleteMeeting'),
   address = require('./routes/createmeet'),
   actionDiscussion = require('./routes/actionDiscussion'),
-  userInfo = require('./routes/userInfo');
+  updateDetails = require('./routes/updateDetails');
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -48,6 +51,10 @@ app.get('/moreDetailsAction/:meetingId', moreDetails.moreDetailsAction);
 app.post('/generateExcel/:meetingId', generate.generateExcel);
 app.put('/checkExcel', check.checkExcel);
 app.get('/download/:meetingTitle', download.downloadExcel);
+app.delete('/deleteMeeting/:meetingIds', deleteMeet.deleteMeeting);
+app.post('/updateDiscussion/:discussionId', updateDetails.updateDiscussion);
+app.post('/updateAction/:actionId', updateDetails.updateAction);
+
 
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);
@@ -59,7 +66,7 @@ app.get('/getExistingMettingInfo/:meetingId', actionDiscussion.getExistingMeetin
 app.get('/getExistingMeetingInfoAction/:meetingId', actionDiscussion.getExistingMeetingInfoAction);
 app.delete('/deleteDiscussionPoints/:trackIndex', actionDiscussion.deleteDiscussionPoints);
 app.delete('/deleteActionItem/:trackIndex', actionDiscussion.deleteActionItem);
-app.get('/getUsername',userInfo.getUsername);
+
 
 app.post('/postMeeting', address.postMeeting);
 app.get('/getMeeting/:id', address.getMeeting);
