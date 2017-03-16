@@ -1,7 +1,7 @@
 var fs = require('fs');
 var sequelize = require("./dbconfiguration").sequelize; //import sequelize database object
 
-exports.getTypes = function(req, res) {
+exports.getMeetingTypes = function(req, res) {
 	var query_status = "SELECT * FROM domo_meeting_type";
 	sequelize.query(query_status, {
         type: sequelize.QueryTypes.SELECT
@@ -35,6 +35,28 @@ exports.getAttendees = function(req, res) {
         console.log("Query Error: " + error);
       });
 }
+
+exports.getAttendeesbyId = function(req, res) {
+	var query_attendeesbyid = "SELECT id,CONCAT_WS(' ',firstName,lastName) as firstlast FROM domo_users WHERE id="  + req.params.id; 
+	sequelize.query(query_attendeesbyid, {
+        type: sequelize.QueryTypes.SELECT
+      }).then(function(attbyid_rows) {
+        res.format({
+          json: function() {
+			
+            res.send(attbyid_rows);
+			
+            
+          }
+        });
+      }).error(function(error) {
+        console.log("Query Error: " + error);
+      });
+}
+
+
+
+
 exports.getFaci = function(req, res) {
 	var query_facilitator = "SELECT id,CONCAT_WS(' ',firstName,lastName) as firstlast FROM domo_users";
 	sequelize.query(query_facilitator, {
@@ -71,23 +93,42 @@ exports.getRec = function(req, res) {
       });
 }
 
+exports.getFirstName = function(req, res) {
+	var query_fname = "SELECT firstName FROM domo_users WHERE userName = "+ "'" +req.params.name+"'";
+	sequelize.query(query_fname, {
+        type: sequelize.QueryTypes.SELECT
+      }).then(function(rec_rows) {
+        res.format({
+          json: function() {
+			
+            res.send(rec_rows);
+			
+            
+          }
+        });
+      }).error(function(error) {
+        console.log("Query Error: " + error);
+      });
+}
+
 exports.postMeeting = function(req, res) {
-	
+	console.log(req.body);
 	 var meeting = {
       //id: req.body.meeting_id,
-      status: req.body.meeting_status,
-      type: req.body.meeting_type,
-      title: req.body.meeting_title,
-	  purpose: req.body.meeting_purpose,
-	  facilitator: req.body.meeting_facilitator,
-	  recorder: req.body.meeting_recorder,
-	  venue: req.body.meeting_venue,
-	  date: req.body.meeting_date,
-      startTime: req.body.meeting_starttime,
-	  endTime: req.body.meeting_endtime,
-      agenda: req.body.meeting_agenda,
-      attendees: req.body.meeting_attendees
+      status: req.body.status,
+      type: req.body.type,
+      title: req.body.title,
+	  purpose: req.body.purpose,
+	  facilitator: req.body.facilitator,
+	  recorder: req.body.recorder,
+	  venue: req.body.venue,
+	  date: req.body.date,
+      startTime: req.body.startTime + ":00",
+	  endTime: req.body.endTime + ":00",
+      agenda: req.body.agenda,
+      attendees: req.body.attendees
     }
+	console.log(meeting);
     var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingPurpose,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active)";
     query += "VALUES (";
     //query += meeting.id + ",";
@@ -153,3 +194,98 @@ exports.getMeeting = function(req, res) {
     console.log("Query Error: " + error);
   });
 };
+exports.getMeetingInfo = function(req, res) {
+  //Use query method to get the data from server
+  sequelize.query("SELECT *,DATE_FORMAT(meetingDate, '%m/%d/%Y') as meetingDate FROM domo_meeting_master WHERE meetingId = " + req.params.id, {
+    type: sequelize.QueryTypes.SELECT
+  }).then(function(results) {
+    res.format({
+      json: function() {
+        res.send(results);
+      }
+    });
+  }).error(function(error) {
+    console.log("Query Error: " + error);
+  });
+};
+exports.updateMeeting = function(req, res) {
+	 console.log(req.body.startTime.length);
+	 if(((req.body.startTime.length)<8)&&((req.body.endTime.length)<8)){
+		 
+	var meeting = {
+      id: req.body.id,
+      status: req.body.status,
+      type: req.body.type,
+      title: req.body.title,
+	  purpose: req.body.purpose,
+	  facilitator: req.body.facilitator,
+	  recorder: req.body.recorder,
+	  venue: req.body.venue,
+	  date: req.body.date,
+      startTime: req.body.startTime + ":00",
+	  endTime: req.body.endTime + ":00",
+      agenda: req.body.agenda,
+      attendees: req.body.attendees
+    }
+	}
+	else
+	{
+		var meeting = {
+      id: req.body.id,
+      status: req.body.status,
+      type: req.body.type,
+      title: req.body.title,
+	  purpose: req.body.purpose,
+	  facilitator: req.body.facilitator,
+	  recorder: req.body.recorder,
+	  venue: req.body.venue,
+	  date: req.body.date,
+      startTime: req.body.startTime,
+	  endTime: req.body.endTime,
+      agenda: req.body.agenda,
+      attendees: req.body.attendees
+    }
+		
+	}
+	console.log(meeting.startTime.length);
+	
+    var query = "UPDATE domo_meeting_master SET";
+    //query += meeting.id + ",";
+    query += " " + "meetingStatus=" + meeting.status + ",";
+    query += " " + "meetingType=" + meeting.type + ",";
+    query += " " + "meetingTitle='" + meeting.title + "',";
+    query += " " + "meetingPurpose='" + meeting.purpose + "',";
+    query += " " + "meetingFacilitator=" + meeting.facilitator + ",";
+	query += " " + "meetingRecorder=" + meeting.recorder + ",";
+	query += " " + "meetingVenue='" + meeting.venue + "',";
+	query += " " + "meetingDate='" + meeting.date + "',";
+	query += " " + "startTime='" + meeting.startTime + "',";
+	query += " " + "endTime='" + meeting.endTime + "',";
+    query += " " + "meetingAgenda='" + meeting.agenda + "',";
+    query += " " + "meetingAttendees='" + meeting.attendees + "',";
+	query += " " + "active=" + 1 + " " ; 
+	query += " WHERE meetingId=" + meeting.id + ";";
+    var queryID = "SELECT * FROM domo_meeting_master WHERE meetingId=" + meeting.id;
+
+    sequelize.query(query, {
+      type: sequelize.QueryTypes.UPDATE
+    }).then(function(results) {
+
+      sequelize.query(queryID, {
+        type: sequelize.QueryTypes.SELECT
+      }).then(function(rows) {
+        res.format({
+          json: function() {
+            //res.send(rows);
+            console.log("Updated");
+			
+          }
+        });
+      }).error(function(error) {
+        console.log("Query Error: " + error);
+      });
+    }).error(function(error) {
+      console.log("Query Error: " + error);
+    });
+  }
+
