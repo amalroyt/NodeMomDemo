@@ -60,7 +60,9 @@ app.get('/getStatus',action.getStatus);
 app.post('/postMeeting',address.postMeeting);
 app.put('/updateMeeting',address.updateMeeting);
 app.get('/getMeeting/:id',address.getMeeting);
+
 app.get('/getMeetingInfo/:id',address.getMeetingInfo);
+
 app.get('/getMeetingTypes',address.getMeetingTypes);
 app.get('/getAttendees',address.getAttendees);
 app.get('/getAttendees/:id',address.getAttendeesbyId);

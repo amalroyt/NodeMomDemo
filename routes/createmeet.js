@@ -194,6 +194,7 @@ exports.getMeeting = function(req, res) {
     console.log("Query Error: " + error);
   });
 };
+
 exports.getMeetingInfo = function(req, res) {
   //Use query method to get the data from server
   sequelize.query("SELECT *,DATE_FORMAT(meetingDate, '%m/%d/%Y') as meetingDate FROM domo_meeting_master WHERE meetingId = " + req.params.id, {
@@ -288,4 +289,6 @@ exports.updateMeeting = function(req, res) {
       console.log("Query Error: " + error);
     });
   }
+
+
 
