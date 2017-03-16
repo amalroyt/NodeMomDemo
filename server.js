@@ -28,6 +28,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
