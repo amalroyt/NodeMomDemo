@@ -24,7 +24,7 @@ exports.generateExcel = function(req, res) {
       });
     }
   }
-  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.userName AS meetingFacilitator,r.userName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d/%m/%Y') AS meetingDate,startTime,endTime,meetingAgenda,meetingAttendees FROM domo_meeting_master INNER JOIN domo_users AS f on domo_meeting_master.meetingFacilitator = f.id INNER JOIN domo_users AS r on  domo_meeting_master.meetingRecorder = r.id INNER JOIN domo_meeting_type on domo_meeting_master.meetingType = domo_meeting_type.id WHERE domo_meeting_master.meetingId= '" + meetingId + "'", {
+  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,meetingAttendees FROM domo_meeting_master INNER JOIN domo_users AS f on domo_meeting_master.meetingFacilitator = f.id INNER JOIN domo_users AS r on  domo_meeting_master.meetingRecorder = r.id INNER JOIN domo_meeting_type on domo_meeting_master.meetingType = domo_meeting_type.id WHERE domo_meeting_master.meetingId= '" + meetingId + "'", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
@@ -69,7 +69,7 @@ exports.generateExcel = function(req, res) {
       }
     });
 
-    sequelize.query(" SELECT di.userName AS discussionBy,domo_discussion_type.discussionType,discussion,de.userName AS decisionBy,decision FROM domo_meeting_points INNER JOIN domo_users AS de on domo_meeting_points.discussionBy = de.id INNER JOIN domo_users AS di on domo_meeting_points.decisionBy = di.id INNER JOIN domo_discussion_type on domo_meeting_points.discussionType = domo_discussion_type.id WHERE  meetingId= '" + meetingId + "'", {
+    sequelize.query(" SELECT di.firstName AS discussionBy,domo_discussion_type.discussionType,discussion,de.firstName AS decisionBy,decision FROM domo_meeting_points INNER JOIN domo_users AS de on domo_meeting_points.discussionBy = de.id INNER JOIN domo_users AS di on domo_meeting_points.decisionBy = di.id INNER JOIN domo_discussion_type on domo_meeting_points.discussionType = domo_discussion_type.id WHERE  meetingId= '" + meetingId + "'", {
       type: sequelize.QueryTypes.SELECT
     }).then(function(results) {
       res.format({
@@ -98,7 +98,7 @@ exports.generateExcel = function(req, res) {
         }
       });
 
-      sequelize.query(" SELECT actionDesc,domo_users.userName AS responsible,Date_FORMAT(openSince, '%d/%m/%Y') AS openSince,Date_FORMAT(expectedCompletion, '%d/%m/%Y') AS expectedCompletion,Date_FORMAT(actualCompletion, '%d/%m/%Y') AS actualCompletion,domo_meeting_status.status AS status FROM domo_meeting_action INNER JOIN domo_users on domo_meeting_action.responsible = domo_users.id LEFT OUTER JOIN domo_meeting_status on domo_meeting_action.status = domo_meeting_status.id WHERE meetingId= '" + meetingId + "'", {
+      sequelize.query(" SELECT actionDesc,domo_users.firstName AS responsible,Date_FORMAT(openSince, '%d-%m-%Y') AS openSince,Date_FORMAT(expectedCompletion, '%d-%m-%Y') AS expectedCompletion,Date_FORMAT(actualCompletion, '%d-%m-%Y') AS actualCompletion,domo_meeting_status.status AS status FROM domo_meeting_action INNER JOIN domo_users on domo_meeting_action.responsible = domo_users.id LEFT OUTER JOIN domo_meeting_status on domo_meeting_action.status = domo_meeting_status.id WHERE meetingId= '" + meetingId + "'", {
         type: sequelize.QueryTypes.SELECT
       }).then(function(results) {
         res.format({
@@ -129,20 +129,9 @@ exports.generateExcel = function(req, res) {
             fs.writeFileSync('excelData/' + fileName + '.xlsx', xls, 'binary');
             //checkExcel function
             check.checkExcel();
+            res.end();
           }
         });
-        sequelize.query(" SELECT * FROM domo_meeting_master", {
-          type: sequelize.QueryTypes.SELECT
-        }).then(function(results) {
-          res.format({
-            json: function() {
-              res.send(results);
-            }
-          });
-        }).error(function(error) {
-          console.log("Query Error: " + error);
-        });
-
       }).error(function(error) {
         console.log("Query Error: " + error);
       });

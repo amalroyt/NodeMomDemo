@@ -28,14 +28,15 @@ exports.preAuthorization = function(req, res) {
           so that the expiry parameter is not available client side.*/
           var newToken = {
               'token': token,
-              'exp': Math.floor(Date.now() / 1000) + 60 * 10
+              'exp': Math.floor(Date.now() / 1000) + 60 * 10,
+              'userDetails': [{'firstName':results[0].firstName,'lastName':results[0].lastName,'userId':results[0].id}]
             }
             //Insert values into token table.
           sequelize.query("INSERT INTO domo_token (token,expiryTime) VALUES ('" + newToken.token + "', from_unixtime('" + newToken.exp + "'))", {
               type: sequelize.QueryTypes.INSERT
             }).then(function(users) {})
             //Insert values into userlog table.
-          sequelize.query("INSERT INTO domo_userlogs (empId,role,date,loginTime,token) VALUES ('" + user.empId + "', '" + user.role + "', curdate(), now(),'" + newToken.token + "') ", {
+          sequelize.query("INSERT INTO domo_userlogs (userId,role,date,loginTime,token) VALUES ('" + user.id + "', '" + user.role + "', curdate(), now(),'" + newToken.token + "') ", {
               type: sequelize.QueryTypes.INSERT
             }).then(function(users) {})
             //Setting token in the response.
