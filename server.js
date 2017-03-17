@@ -22,16 +22,12 @@ var express = require('express'),
   address = require('./routes/createmeet'),
   actionDiscussion = require('./routes/actionDiscussion'),
   updateDetails = require('./routes/updateDetails');
-
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT, POST");
   next();
 });
-
-
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
@@ -67,15 +63,17 @@ app.get('/getExistingMeetingInfoAction/:meetingId', actionDiscussion.getExisting
 app.delete('/deleteDiscussionPoints/:trackIndex', actionDiscussion.deleteDiscussionPoints);
 app.delete('/deleteActionItem/:trackIndex', actionDiscussion.deleteActionItem);
 
-
-app.post('/postMeeting', address.postMeeting);
-app.get('/getMeeting/:id', address.getMeeting);
-app.get('/getMeetingTypes', address.getMeetingTypes);
-app.get('/getAttendees', address.getAttendees);
-app.get('/getFaci', address.getFaci);
-app.get('/getRec', address.getRec);
-app.delete('/deleteMeet/:id', address.deleteMeet);
-
+app.post('/postMeeting',address.postMeeting);
+app.put('/updateMeeting',address.updateMeeting);
+app.get('/getMeeting/:id',address.getMeeting);
+app.get('/getMeetingInfo/:id',address.getMeetingInfo);
+app.get('/getMeetingTypes',address.getMeetingTypes);
+app.get('/getAttendees',address.getAttendees);
+app.get('/getAttendees/:id',address.getAttendeesbyId);
+app.get('/getFaci',address.getFaci);
+app.get('/getRec',address.getRec);
+app.get('/getFirstName/:name',address.getFirstName);
+app.delete('/deleteMeet/:id',address.deleteMeet);
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
