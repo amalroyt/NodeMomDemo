@@ -74,16 +74,20 @@ exports.discussionPoints = function(req, res) {
   var id = user[0];
   console.log(id);
   var userValues = JSON.parse(user[1]);
+  var userId = user[2];
+  console.log(userId);
   console.log(userValues);
   console.log(userValues.discussionBy);
-  var query = "INSERT INTO domo_meeting_points (meetingId,discussionBy,discussionType,discussion,decisionBy,decision)";
+  var query = "INSERT INTO domo_meeting_points (meetingId,discussionBy,discussionType,discussion,decisionBy,decision,createdBy,createdDate)";
   query += "VALUES (";
   query += " '" + id + "',";
   query += " '" + userValues.discussionBy + "',";
   query += " '" + userValues.discussionType + "',";
   query += " '" + userValues.discussion + "',";
   query += " '" + userValues.decisionBy + "',";
-  query += " '" + userValues.decision + "' )";
+  query += " '" + userValues.decision + "',";
+  query += " '" + userId + "',";
+  query += " CURDATE() )";
 
   sequelize.query(query, {
     type: sequelize.QueryTypes.INSERT
@@ -160,10 +164,12 @@ exports.actionItems = function(req, res) {
   var id = user[0];
   console.log(id);
   var userValues = JSON.parse(user[1]);
+  var userId = user[2];
+  console.log(userId);
   console.log(userValues);
 
   if (userValues.status == 2) {
-    var query = "INSERT INTO domo_meeting_action (meetingId,actionDesc,responsible,openSince,expectedCompletion,actualCompletion,status)";
+    var query = "INSERT INTO domo_meeting_action (meetingId,actionDesc,responsible,openSince,expectedCompletion,actualCompletion,status,createdBy,createdDate)";
     query += "VALUES (";
     query += " '" + id + "',";
     query += " '" + userValues.actionDesc + "',";
@@ -171,7 +177,9 @@ exports.actionItems = function(req, res) {
     query += " '" + userValues.openSince + "',";
     query += " '" + userValues.expectedCompletion + "',";
     query += " CURDATE() ,";
-    query += " '" + userValues.status + "')";
+    query += " '" + userValues.status + "',";
+    query += " '" + userId + "',";
+    query += " CURDATE() )";
     sequelize.query(query, {
       type: sequelize.QueryTypes.INSERT
     }).then(function(results) {
@@ -188,14 +196,16 @@ exports.actionItems = function(req, res) {
 
   }
   else {
-    var query = "INSERT INTO domo_meeting_action (meetingId,actionDesc,responsible,openSince,expectedCompletion,status)";
+    var query = "INSERT INTO domo_meeting_action (meetingId,actionDesc,responsible,openSince,expectedCompletion,status,createdBy,createdDate)";
     query += "VALUES (";
     query += " '" + id + "',";
     query += " '" + userValues.actionDesc + "',";
     query += " '" + userValues.responsible + "',";
     query += " '" + userValues.openSince + "',";
     query += " '" + userValues.expectedCompletion + "',";
-    query += " '" + userValues.status + "')";
+    query += " '" + userValues.status + "',";
+    query += " '" + userId + "',";
+    query += " CURDATE() )";
     sequelize.query(query, {
       type: sequelize.QueryTypes.INSERT
     }).then(function(results) {
