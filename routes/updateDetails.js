@@ -21,7 +21,21 @@ exports.updateAction = function(req, res) {
   var updateDetails = req.body;
   var actionDetails = JSON.parse(updateDetails[1]);
   var userId = JSON.parse(updateDetails[0]);
-  sequelize.query(" UPDATE domo_meeting_action SET actionDesc = '" + actionDetails.actionDesc + "', responsible = '" + actionDetails.responsible + "', openSince = '" + actionDetails.openSince + "', expectedCompletion = '" + actionDetails.expectedCompletion + "', actualCompletion = '" + actionDetails.actualCompletion + "' , status = '" + actionDetails.status + "' WHERE id = '" + actionId + "'", {
+
+  if ( actionDetails.status === 2 ) {
+    sequelize.query(" UPDATE domo_meeting_action SET actionDesc = '" + actionDetails.actionDesc + "', responsible = '" + actionDetails.responsible + "', openSince = '" + actionDetails.openSince + "', expectedCompletion = '" + actionDetails.expectedCompletion + "', actualCompletion = currDate() , status = '" + actionDetails.status + "' WHERE id = '" + actionId + "'", {
+      type: sequelize.QueryTypes.UPDATE
+    }).then(function(results) {
+      sequelize.query(" INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_action','"+actionDetails.meetingId+"','"+userId+"',curdate())", {
+        type: sequelize.QueryTypes.UPDATE
+      }).then(function(results) {})
+          res.end();
+    }).error(function(error) {
+      console.log("Query Error: " + error);
+    });
+  }
+  else {
+  sequelize.query(" UPDATE domo_meeting_action SET actionDesc = '" + actionDetails.actionDesc + "', responsible = '" + actionDetails.responsible + "', openSince = '" + actionDetails.openSince + "', expectedCompletion = '" + actionDetails.expectedCompletion + "', status = '" + actionDetails.status + "' WHERE id = '" + actionId + "'", {
     type: sequelize.QueryTypes.UPDATE
   }).then(function(results) {
     sequelize.query(" INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_action','"+actionDetails.meetingId+"','"+userId+"',curdate())", {
@@ -31,4 +45,6 @@ exports.updateAction = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
+
+}
 };
