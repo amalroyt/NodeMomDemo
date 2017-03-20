@@ -6,7 +6,7 @@ exports.updateDiscussion = function(req, res) {
   var userId = JSON.parse(updateDetails[0]);
   sequelize.query(" UPDATE domo_meeting_points SET discussionBy = '" + discussionDetails.discussionBy + "', discussionType = '" + discussionDetails.discussionType + "', discussion = '" + discussionDetails.discussion + "', decisionBy = '" + discussionDetails.decisionBy + "', decision = '" + discussionDetails.decision + "' WHERE id = '" + discussionId + "'", {
     type: sequelize.QueryTypes.UPDATE
-  }).then(function(results) {console.log("inside");
+  }).then(function(results) {
     sequelize.query(" INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_points','"+discussionDetails.meetingId+"','"+userId+"',curdate())", {
       type: sequelize.QueryTypes.INSERT
     }).then(function(results) {})
@@ -21,6 +21,7 @@ exports.updateAction = function(req, res) {
   var updateDetails = req.body;
   var actionDetails = JSON.parse(updateDetails[1]);
   var userId = JSON.parse(updateDetails[0]);
+
   if ( actionDetails.status === 2 ) {
     sequelize.query(" UPDATE domo_meeting_action SET actionDesc = '" + actionDetails.actionDesc + "', responsible = '" + actionDetails.responsible + "', openSince = '" + actionDetails.openSince + "', expectedCompletion = '" + actionDetails.expectedCompletion + "', actualCompletion = currDate() , status = '" + actionDetails.status + "' WHERE id = '" + actionId + "'", {
       type: sequelize.QueryTypes.UPDATE
@@ -44,5 +45,6 @@ exports.updateAction = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
+
 }
 };
