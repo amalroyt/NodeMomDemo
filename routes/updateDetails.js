@@ -6,7 +6,7 @@ exports.updateDiscussion = function(req, res) {
   var userId = JSON.parse(updateDetails[0]);
   sequelize.query(" UPDATE domo_meeting_points SET discussionBy = '" + discussionDetails.discussionBy + "', discussionType = '" + discussionDetails.discussionType + "', discussion = '" + discussionDetails.discussion + "', decisionBy = '" + discussionDetails.decisionBy + "', decision = '" + discussionDetails.decision + "' WHERE id = '" + discussionId + "'", {
     type: sequelize.QueryTypes.UPDATE
-  }).then(function(results) {
+  }).then(function(results) {console.log("inside");
     sequelize.query(" INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_points','"+discussionDetails.meetingId+"','"+userId+"',curdate())", {
       type: sequelize.QueryTypes.INSERT
     }).then(function(results) {})
