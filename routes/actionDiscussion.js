@@ -128,7 +128,7 @@ exports.deleteDiscussionPoints = function(req, res) {
 // to get existing meeting details(action)
 exports.getExistingMeetingInfoAction = function(req, res) {
   var meetingId = req.params.meetingId;
-  sequelize.query(" SELECT id, meetingId,actionDesc,responsible,DATE_FORMAT(openSince, '%m/%d/%Y') as openSince,DATE_FORMAT(expectedCompletion, '%m/%d/%Y') as expectedCompletion,DATE_FORMAT(actualCompletion, '%m/%d/%Y') as actualCompletion, status FROM domo_meeting_action WHERE active != true AND meetingId= '" + meetingId + "'", {
+  sequelize.query(" SELECT id, meetingId,actionDesc,responsible,DATE_FORMAT(openSince, '%Y-%m-%d') as openSince,DATE_FORMAT(expectedCompletion, '%Y-%m-%d') as expectedCompletion,DATE_FORMAT(actualCompletion, '%Y-%m-%d') as actualCompletion, status FROM domo_meeting_action WHERE active != true AND meetingId= '" + meetingId + "'", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
