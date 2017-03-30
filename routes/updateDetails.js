@@ -56,5 +56,6 @@ exports.updateAction = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
+
 }
 };
