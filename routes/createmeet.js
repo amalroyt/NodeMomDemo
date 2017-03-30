@@ -1,6 +1,22 @@
 var fs = require('fs');
 var sequelize = require("./dbconfiguration").sequelize; //import sequelize database object
 
+  exports.checkIfAllItemsClosed = function(req, res) {
+    var meetingId = req.params.id;
+    console.log(meetingId);
+    sequelize.query("SELECT status FROM domo_meeting_action WHERE meetingId=" + meetingId , {
+      type: sequelize.QueryTypes.SELECT
+    }).then(function(results) {
+      res.format({
+        json: function() {
+          res.send(results);
+        }
+      });
+    }).error(function(error) {
+      console.log("Query Error: " + error);
+    });
+}
+
 exports.getMeetingTypes = function(req, res) {
   var query_status = "SELECT * FROM domo_meeting_type";
   sequelize.query(query_status, {
@@ -93,24 +109,6 @@ exports.getRec = function(req, res) {
   });
 }
 
-exports.getFirstName = function(req, res) {
-  var query_fname = "SELECT firstName FROM domo_users WHERE userName = " + "'" + req.params.name + "'";
-  sequelize.query(query_fname, {
-    type: sequelize.QueryTypes.SELECT
-  }).then(function(rec_rows) {
-    res.format({
-      json: function() {
-
-        res.send(rec_rows);
-
-
-      }
-    });
-  }).error(function(error) {
-    console.log("Query Error: " + error);
-  });
-}
-
 exports.postMeeting = function(req, res) {
   console.log(req.body);
 	var createMeet = req.body;
@@ -165,7 +163,7 @@ exports.postMeeting = function(req, res) {
     }).then(function(rows) {
       res.format({
         json: function() {
-          //res.send(rows);
+          res.send(rows);
           console.log("Inserted");
 
         }
@@ -295,7 +293,10 @@ exports.updateMeeting = function(req, res) {
     }).then(function(rows) {
       res.format({
         json: function() {
-          //res.send(rows);
+          sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 WHERE meetingId = '" + meeting.id + "'", {
+         type: sequelize.QueryTypes.UPDATE
+       }).then(function(results) {})
+          res.end();
           console.log("Updated");
 
         }
@@ -306,4 +307,5 @@ exports.updateMeeting = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
+
 }

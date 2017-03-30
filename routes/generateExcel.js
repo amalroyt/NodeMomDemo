@@ -1,11 +1,11 @@
 var sequelize = require("./dbconfiguration").sequelize;
 var json2xls = require('json2xls');
 var fs = require('fs');
-var check = require('./checkExcel');
 exports.generateExcel = function(req, res) {
   var meetingMaster = [];
   var fileName;
   var meetingId = req.params.meetingId;
+  var versionNum;
   var spacingFunc = function() {
     for (var i = 0; i < 3; i++) {
       meetingMaster.push({
@@ -69,7 +69,7 @@ exports.generateExcel = function(req, res) {
       }
     });
 
-    sequelize.query(" SELECT di.firstName AS discussionBy,domo_discussion_type.discussionType,discussion,de.firstName AS decisionBy,decision FROM domo_meeting_points INNER JOIN domo_users AS de on domo_meeting_points.discussionBy = de.id INNER JOIN domo_users AS di on domo_meeting_points.decisionBy = di.id INNER JOIN domo_discussion_type on domo_meeting_points.discussionType = domo_discussion_type.id WHERE  meetingId= '" + meetingId + "'", {
+    sequelize.query(" SELECT di.firstName AS discussionBy,domo_discussion_type.discussionType,discussion,de.firstName AS decisionBy,decision FROM domo_meeting_points INNER JOIN domo_users AS di on domo_meeting_points.discussionBy = di.id INNER JOIN domo_users AS de on domo_meeting_points.decisionBy = de.id INNER JOIN domo_discussion_type on domo_meeting_points.discussionType = domo_discussion_type.id WHERE  meetingId= '" + meetingId + "'", {
       type: sequelize.QueryTypes.SELECT
     }).then(function(results) {
       res.format({
@@ -126,10 +126,20 @@ exports.generateExcel = function(req, res) {
               });
             }
             var xls = json2xls(meetingMaster);
-            fs.writeFileSync('excelData/' + fileName + '.xlsx', xls, 'binary');
-            //checkExcel function
-            check.checkExcel();
-            res.end();
+
+            //To check if file is to generated for the first time or not.
+            var ititialDir = 'D:/NodeMomDemo/excelData/';
+            if (!fs.existsSync(ititialDir + fileName )){
+                fs.mkdirSync(ititialDir + fileName );
+            }
+              fs.writeFileSync('excelData/' + fileName + '/' + fileName + '_' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
+              sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 1 where meetingId = '" + meetingId + "' LIMIT 1  ", {
+                type: sequelize.QueryTypes.UPDATE
+              }).then(function(results) {
+                res.end();
+              })
+
+            //res.end();
           }
         });
       }).error(function(error) {

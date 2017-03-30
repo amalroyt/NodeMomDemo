@@ -51,7 +51,6 @@ app.put('/deleteMeeting/:meetingIds', deleteMeet.deleteMeeting);
 app.post('/updateDiscussion/:discussionId', updateDetails.updateDiscussion);
 app.post('/updateAction/:actionId', updateDetails.updateAction);
 
-
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);
 app.post('/actionItems', actionDiscussion.actionItems);
@@ -72,8 +71,8 @@ app.get('/getAttendees',address.getAttendees);
 app.get('/getAttendees/:id',address.getAttendeesbyId);
 app.get('/getFaci',address.getFaci);
 app.get('/getRec',address.getRec);
-app.get('/getFirstName/:name',address.getFirstName);
 app.delete('/deleteMeet/:id',address.deleteMeet);
+app.get('/checkIfAllItemsClosed/:id',address.checkIfAllItemsClosed);
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');
