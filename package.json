@@ -37,7 +37,8 @@
     "rxjs": "^5.0.1",
     "sequelize": "^3.28.0",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.7.2"
+    "zone.js": "^0.7.2",
+      "json2xls": "3.10.3"
   },
   "devDependencies": {
     "@angular/compiler-cli": "^2.3.1",
