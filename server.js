@@ -50,6 +50,7 @@ app.get('/download/:meetingId', download.downloadExcel);
 app.put('/deleteMeeting/:meetingIds', deleteMeet.deleteMeeting);
 app.post('/updateDiscussion/:discussionId', updateDetails.updateDiscussion);
 app.post('/updateAction/:actionId', updateDetails.updateAction);
+app.put('/logoutToken', authorization.preLogout);
 
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);

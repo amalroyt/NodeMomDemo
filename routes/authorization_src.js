@@ -52,3 +52,12 @@ exports.preAuthorization = function(req, res) {
     console.log("Query Error: " + error);
   });
 };
+
+exports.preLogout = function(req, res) {
+var token = req.body.token;
+  sequelize.query("DELETE FROM domo_token WHERE TOKEN = '" + token + "' ", {
+      type: sequelize.QueryTypes.DELETE
+    }).then(function(users) {
+        res.end();
+    })
+}

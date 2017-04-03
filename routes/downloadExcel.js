@@ -1,7 +1,6 @@
 path = require('path');
 const fs = require('fs');
 exports.downloadExcel = function(req, res) {
-  console.log("download");
   var meetingId = req.params.meetingId;
   var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
   fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
