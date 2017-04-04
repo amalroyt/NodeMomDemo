@@ -129,6 +129,8 @@ exports.generateExcel = function(req, res) {
             if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
                 fs.mkdirSync(ititialDir + 'meeting_' + meetingId);
             }
+            console.log("generate math floor");
+            console.log(Math.floor(Date.now() / 1000));
               fs.writeFileSync('excelData/' + 'meeting_' + meetingId + '/' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
               sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 1 where meetingId = '" + meetingId + "' LIMIT 1  ", {
                 type: sequelize.QueryTypes.UPDATE
