@@ -3,7 +3,6 @@ var json2xls = require('json2xls');
 var fs = require('fs');
 exports.generateExcel = function(req, res) {
   var meetingMaster = [];
-  var fileName;
   var meetingId = req.params.meetingId;
   var versionNum;
   var spacingFunc = function() {
@@ -24,12 +23,11 @@ exports.generateExcel = function(req, res) {
       });
     }
   }
-  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,meetingAttendees FROM domo_meeting_master INNER JOIN domo_users AS f on domo_meeting_master.meetingFacilitator = f.id INNER JOIN domo_users AS r on  domo_meeting_master.meetingRecorder = r.id INNER JOIN domo_meeting_type on domo_meeting_master.meetingType = domo_meeting_type.id WHERE domo_meeting_master.meetingId= '" + meetingId + "'", {
+  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,group_concat(' ',f.firstName,' ',f.lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) INNER JOIN domo_users AS f on t1.meetingFacilitator = f.id INNER JOIN domo_users AS r on  t1.meetingRecorder = r.id INNER JOIN domo_meeting_type on t1.meetingType = domo_meeting_type.id WHERE t1.meetingId = '" + meetingId + "'", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
       json: function() {
-        fileName = results[0].meetingTitle;
         spacingFunc();
 
         meetingMaster.push({
@@ -126,20 +124,20 @@ exports.generateExcel = function(req, res) {
               });
             }
             var xls = json2xls(meetingMaster);
-
             //To check if file is to generated for the first time or not.
-            var ititialDir = 'D:/NodeMomDemo/excelData/';
-            if (!fs.existsSync(ititialDir + fileName )){
-                fs.mkdirSync(ititialDir + fileName );
+            var ititialDir = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+            if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
+                fs.mkdirSync(ititialDir + 'meeting_' + meetingId);
             }
-              fs.writeFileSync('excelData/' + fileName + '/' + fileName + '_' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
+            console.log("generate math floor");
+            console.log(Math.floor(Date.now() / 1000));
+              fs.writeFileSync('excelData/' + 'meeting_' + meetingId + '/' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
               sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 1 where meetingId = '" + meetingId + "' LIMIT 1  ", {
                 type: sequelize.QueryTypes.UPDATE
               }).then(function(results) {
                 res.end();
               })
 
-            //res.end();
           }
         });
       }).error(function(error) {

@@ -1,9 +1,9 @@
 path = require('path');
 const fs = require('fs');
 exports.downloadExcel = function(req, res) {
-  var meetingTitle = req.params.meetingTitle;
-  var filePath = 'D:/NodeMomDemo/excelData/';
-  fs.readdir(filePath + '/' + meetingTitle, (err, files) => {
+  var meetingId = req.params.meetingId;
+  var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+  fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
     var patt = /[\d]{10}/g;
     var diffArray = [];
     files.forEach(file => {
@@ -18,7 +18,7 @@ exports.downloadExcel = function(req, res) {
         fileName = diffArray[i].fileName;
       }
     }
-    var thisPath = path.resolve(filePath + '/' + meetingTitle + '/' + fileName);
+    var thisPath = path.resolve(filePath + 'meeting_' + meetingId + '/' + fileName);
     res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.download(thisPath);
   })

@@ -46,10 +46,13 @@ app.get('/moreDetailsPoints/:meetingId', moreDetails.moreDetailsPoints);
 app.get('/moreDetailsAction/:meetingId', moreDetails.moreDetailsAction);
 app.post('/generateExcel/:meetingId', generate.generateExcel);
 app.put('/checkExcel', check.checkExcel);
-app.get('/download/:meetingTitle', download.downloadExcel);
+app.get('/download/:meetingId', download.downloadExcel);
 app.put('/deleteMeeting/:meetingIds', deleteMeet.deleteMeeting);
 app.post('/updateDiscussion/:discussionId', updateDetails.updateDiscussion);
 app.post('/updateAction/:actionId', updateDetails.updateAction);
+app.put('/logoutToken', authorization.preLogout);
+app.get('/moreDetailsHistory/:meetingId', moreDetails.moreDetailsHistory);
+app.get('/downloadPrev/:download',moreDetails.downloadPrev);
 
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);
