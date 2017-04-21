@@ -244,8 +244,7 @@ exports.deleteActionItem = function(req, res) {
 
 
 exports.getActionItemsInformationForGraph = function(req, res) {
-  // sequelize.query("SELECT t1.meetingId,t4.meetingTitle,actionDesc,CONCAT_WS(' ',t3.firstName,t3.lastName) as userName,DATEDIFF(actualCompletion, openSince) as dateDiff from domo_meeting_action as t1 left join domo_meeting_status as t2 ON t1.status = t2.id left join domo_users as t3 ON t1.responsible = t3.id left join domo_meeting_master as t4 ON t1.meetingId = t4.meetingId WHERE t1.active != true AND t1.actualCompletion != ''", {
-      sequelize.query("SELECT t1.meetingId,t4.meetingTitle,actionDesc,CONCAT_WS(' ',t3.firstName,t3.lastName) as userName,5 * (DATEDIFF(actualCompletion,openSince) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(openSince) + WEEKDAY(actualCompletion) + 1, 1) as dateDiff from domo_meeting_action as t1 left join domo_meeting_status as t2 ON t1.status = t2.id left join domo_users as t3 ON t1.responsible = t3.id left join domo_meeting_master as t4 ON t1.meetingId = t4.meetingId WHERE t1.active != true AND t4.meetingStatus = 1 AND t1.actualCompletion != ''", {
+      sequelize.query("SELECT CONCAT_WS(' ',t1.firstName,t1.lastName) as userName, t3.meetingTitle, avg(5  (DATEDIFF(t2.actualCompletion, t2.openSince) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7  WEEKDAY(t2.openSince) + WEEKDAY(t2.actualCompletion) + 1, 1)) as dateDiff from domo_users as t1 RIGHT JOIN domo_meeting_action as t2 on t2.responsible = t1.id LEFT JOIN domo_meeting_master as t3 on t2.meetingId = t3.meetingId group by t1.id, t2.meetingId", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({

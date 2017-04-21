@@ -3,7 +3,7 @@ var sequelize = require("./dbconfiguration").sequelize,
 const fs = require('fs');
 exports.moreDetails = function(req, res) {
   var meetingId = req.params.meetingId;
-  sequelize.query(" select meetingId,meetingTitle,meetingPurpose,meetingAgenda,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,group_concat(' ',firstName,' ',lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) WHERE t1.meetingId = '" + meetingId + "' group by t1.meetingId", {
+  sequelize.query(" select meetingId,meetingTitle,meetingPurpose,meetingAgenda,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,group_concat(' ',firstName, ' ', lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) WHERE t1.meetingId = '" + meetingId + "' group by t1.meetingId", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
@@ -48,7 +48,7 @@ exports.moreDetailsAction = function(req, res) {
 
 exports.moreDetailsHistory = function(req, res) {
   var meetingId = req.params.meetingId;
-  var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+  var filePath = 'C:/Users/rutujas/Desktop/My_Backup/FINAL/BackEnd/NodeMomDemo/excelData/';
   if (fs.existsSync(filePath + 'meeting_' + meetingId)) {
     fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
       var date;
@@ -71,7 +71,6 @@ exports.moreDetailsHistory = function(req, res) {
 
 exports.downloadPrev = function(req, res) {
   var fileName = JSON.parse(req.params.download);
-  console.log(fileName);
   var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
   var thisPath = path.resolve(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName);
   res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

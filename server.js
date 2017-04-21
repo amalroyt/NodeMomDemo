@@ -20,6 +20,7 @@ var express = require('express'),
   download = require('./routes/downloadExcel'),
   deleteMeet = require('./routes/deleteMeeting'),
   address = require('./routes/createmeet'),
+  d3 = require('./routes/heatmap'),
   actionDiscussion = require('./routes/actionDiscussion'),
   updateDetails = require('./routes/updateDetails'),
   quarterMeetings = require('./routes/d3Graphs/quarterMeetings');
@@ -80,6 +81,9 @@ app.get('/getFaci',address.getFaci);
 app.get('/getRec',address.getRec);
 app.delete('/deleteMeet/:id',address.deleteMeet);
 app.get('/checkIfAllItemsClosed/:id',address.checkIfAllItemsClosed);
+app.get('/generateheatmap',d3.generateheatmap);
+app.get('/showmoredetails/:id',d3.showmoredetails);
+
 
 app.listen(8081, function() {
   console.log('Example listening on port 8081!');

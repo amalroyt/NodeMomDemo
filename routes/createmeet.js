@@ -1,7 +1,7 @@
 var fs = require('fs');
 var sequelize = require("./dbconfiguration").sequelize; //import sequelize database object
 
-  exports.checkIfAllItemsClosed = function(req, res) {
+ exports.checkIfAllItemsClosed = function(req, res) {
     var meetingId = req.params.id;
     console.log(meetingId);
     sequelize.query("SELECT status FROM domo_meeting_action WHERE meetingId=" + meetingId , {
@@ -16,6 +16,7 @@ var sequelize = require("./dbconfiguration").sequelize; //import sequelize datab
       console.log("Query Error: " + error);
     });
 }
+
 
 exports.getMeetingTypes = function(req, res) {
   var query_status = "SELECT * FROM domo_meeting_type";
@@ -109,11 +110,32 @@ exports.getRec = function(req, res) {
   });
 }
 
+exports.getFirstName = function(req, res) {
+  var query_fname = "SELECT firstName FROM domo_users WHERE userName = " + "'" + req.params.name + "'";
+  sequelize.query(query_fname, {
+    type: sequelize.QueryTypes.SELECT
+  }).then(function(rec_rows) {
+    
+    res.format({
+      json: function() {
+
+        res.send(rec_rows);
+
+
+      }
+    });
+  }).error(function(error) {
+    console.log("Query Error: " + error);
+  });
+
+
+}
+
 exports.postMeeting = function(req, res) {
   console.log(req.body);
-	var createMeet = req.body;
-	var userId = JSON.parse(createMeet[0]);
-	var meet = JSON.parse(createMeet[1])
+  var createMeet = req.body;
+  var userId = JSON.parse(createMeet[0]);
+  var meet = JSON.parse(createMeet[1])
   var meeting = {
     //id: req.body.meeting_id,
     status: meet.status,
@@ -128,11 +150,12 @@ exports.postMeeting = function(req, res) {
     endTime: meet.endTime + ":00",
     agenda: meet.agenda,
     attendees: meet.attendees,
-    startForm : meet.startForm,
-    endForm : meet.endForm
+    startForm: meet.startForm,
+    endForm: meet.endForm,
+    duration: meet.duration
   }
   console.log(meeting);
-  var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingPurpose,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active,createdBy,createdDate,startForm,endForm)";
+  var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingPurpose,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active,createdBy,createdDate,startForm,endForm,duration)";
   query += "VALUES (";
   //query += meeting.id + ",";
   query += " '" + meeting.status + "',";
@@ -148,10 +171,11 @@ exports.postMeeting = function(req, res) {
   query += " '" + meeting.agenda + "',";
   query += " '" + meeting.attendees + "',";
   query += " " + 0 + ",";
-	query += " " + userId + ",";
-	query += "curdate(),";
+  query += " " + userId + ",";
+  query += "curdate(),";
   query += "'" + meeting.startForm + "',";
-  query += "'" + meeting.endForm + "')";
+  query += "'" + meeting.endForm + "',";
+  query += "'" + meeting.duration + "')";
   var queryID = "SELECT * FROM domo_meeting_master";
 
   sequelize.query(query, {
@@ -217,10 +241,10 @@ exports.getMeetingInfo = function(req, res) {
   });
 };
 exports.updateMeeting = function(req, res) {
-	var editMeet = req.body;
-	var userId = JSON.parse(editMeet[0]);
+  var editMeet = req.body;
+  var userId = JSON.parse(editMeet[0]);
 
-	var meet = JSON.parse(editMeet[1]);
+  var meet = JSON.parse(editMeet[1]);
 
   //console.log(meet.startTime.length);
   if (((meet.startTime.length) < 8) && ((meet.endTime.length) < 8)) {
@@ -239,8 +263,10 @@ exports.updateMeeting = function(req, res) {
       endTime: meet.endTime + ":00",
       agenda: meet.agenda,
       attendees: meet.attendees,
-      startForm : meet.startForm,
-      endForm : meet.endForm
+      startForm: meet.startForm,
+      endForm: meet.endForm,
+      duration: meet.duration,
+      reason: meet.reason
     }
   } else {
     var meeting = {
@@ -257,13 +283,15 @@ exports.updateMeeting = function(req, res) {
       endTime: meet.endTime,
       agenda: meet.agenda,
       attendees: meet.attendees,
-      startForm : meet.startForm,
-      endForm : meet.endForm
+      startForm: meet.startForm,
+      endForm: meet.endForm,
+      duration: meet.duration,
+      reason: meet.reason
     }
 
   }
   console.log(meeting.startTime.length);
-
+  console.log(meeting);
   var query = "UPDATE domo_meeting_master SET";
   //query += meeting.id + ",";
   query += " " + "meetingStatus=" + meeting.status + ",";
@@ -279,11 +307,13 @@ exports.updateMeeting = function(req, res) {
   query += " " + "meetingAgenda='" + meeting.agenda + "',";
   query += " " + "meetingAttendees='" + meeting.attendees + "',";
   query += " " + "startForm='" + meeting.startForm + "',";
-  query += " " + "endForm='" + meeting.endForm + "'";
+  query += " " + "endForm='" + meeting.endForm + "',";
+  query += " " + "duration='" + meeting.duration + "',";
+  query += " " + "reason='" + meeting.reason + "'";
   //query += " " + "active=" + 1 + " ";
   query += " WHERE meetingId=" + meeting.id + ";";
   var queryID = "SELECT * FROM domo_meeting_master WHERE meetingId=" + meeting.id;
-	var updateQuery = "INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_master','"+ meeting.id +"','"+ userId +"',curdate())";
+  var updateQuery = "INSERT INTO domo_tasklogs (task,onTable,meetingId,updatedBy,updatedDate) VALUES ('Update','domo_meeting_master','" + meeting.id + "','" + userId + "',curdate())";
   sequelize.query(query, {
     type: sequelize.QueryTypes.UPDATE
   }).then(function(results) {
@@ -293,10 +323,7 @@ exports.updateMeeting = function(req, res) {
     }).then(function(rows) {
       res.format({
         json: function() {
-          sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 WHERE meetingId = '" + meeting.id + "'", {
-         type: sequelize.QueryTypes.UPDATE
-       }).then(function(results) {})
-          res.end();
+          //res.send(rows);
           console.log("Updated");
 
         }
@@ -307,5 +334,4 @@ exports.updateMeeting = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
-
 }
