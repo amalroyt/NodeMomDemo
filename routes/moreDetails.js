@@ -12,7 +12,20 @@ exports.moreDetails = function(req, res) {
       }
     });
   }).error(function(error) {
+    console.log("Query Error: " + error);      }
+    });
+  }).error(function(error) {
     console.log("Query Error: " + error);
+  });
+};
+
+exports.moreDetailsHistory = function(req, res) {
+  var meetingId = req.params.meetingId;
+
+  var filePath = 'D:/NodeMomDemo/excelData/';
+
+  if (fs.existsSync(filePath + 'meeting_' + meetingId)) {
+    fs.readdir
   });
 };
 
@@ -39,18 +52,7 @@ exports.moreDetailsAction = function(req, res) {
     res.format({
       json: function() {
         res.send(results);
-      }
-    });
-  }).error(function(error) {
-    console.log("Query Error: " + error);
-  });
-};
-
-exports.moreDetailsHistory = function(req, res) {
-  var meetingId = req.params.meetingId;
-  var filePath = 'D:/NodeMomDemo/excelData/';
-  if (fs.existsSync(filePath + 'meeting_' + meetingId)) {
-    fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
+(filePath + 'meeting_' + meetingId, (err, files) => {
       var date;
       var patt = /[\d]{10}/g;
       var diffArray = [];
