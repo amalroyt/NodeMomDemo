@@ -125,19 +125,16 @@ exports.generateExcel = function(req, res) {
             }
             var xls = json2xls(meetingMaster);
             //To check if file is to generated for the first time or not.
-            var ititialDir = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+            var ititialDir = 'D:/NodeMomDemo/excelData/';
             if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
                 fs.mkdirSync(ititialDir + 'meeting_' + meetingId);
             }
-            console.log("generate math floor");
-            console.log(Math.floor(Date.now() / 1000));
               fs.writeFileSync('excelData/' + 'meeting_' + meetingId + '/' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
               sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 1 where meetingId = '" + meetingId + "' LIMIT 1  ", {
                 type: sequelize.QueryTypes.UPDATE
               }).then(function(results) {
                 res.end();
               })
-
           }
         });
       }).error(function(error) {

@@ -64,6 +64,7 @@ app.get('/getExistingMettingInfo/:meetingId', actionDiscussion.getExistingMeetin
 app.get('/getExistingMeetingInfoAction/:meetingId', actionDiscussion.getExistingMeetingInfoAction);
 app.delete('/deleteDiscussionPoints/:trackIndex', actionDiscussion.deleteDiscussionPoints);
 app.delete('/deleteActionItem/:trackIndex', actionDiscussion.deleteActionItem);
+app.get('/getActionItemsInformationForGraph', actionDiscussion.getActionItemsInformationForGraph);
 
 app.post('/postMeeting',address.postMeeting);
 app.put('/updateMeeting',address.updateMeeting);
