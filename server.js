@@ -21,7 +21,8 @@ var express = require('express'),
   deleteMeet = require('./routes/deleteMeeting'),
   address = require('./routes/createmeet'),
   actionDiscussion = require('./routes/actionDiscussion'),
-  updateDetails = require('./routes/updateDetails');
+  updateDetails = require('./routes/updateDetails'),
+  quarterMeetings = require('./routes/d3Graphs/quarterMeetings');
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -53,6 +54,8 @@ app.post('/updateAction/:actionId', updateDetails.updateAction);
 app.put('/logoutToken', authorization.preLogout);
 app.get('/moreDetailsHistory/:meetingId', moreDetails.moreDetailsHistory);
 app.get('/downloadPrev/:download',moreDetails.downloadPrev);
+app.get('/quarterMeetings/:quarterDates',quarterMeetings.quarterMeetingsData);
+app.get('/isAdminUser/:userId',authorization.postAuthorization);
 
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);
@@ -64,6 +67,7 @@ app.get('/getExistingMettingInfo/:meetingId', actionDiscussion.getExistingMeetin
 app.get('/getExistingMeetingInfoAction/:meetingId', actionDiscussion.getExistingMeetingInfoAction);
 app.delete('/deleteDiscussionPoints/:trackIndex', actionDiscussion.deleteDiscussionPoints);
 app.delete('/deleteActionItem/:trackIndex', actionDiscussion.deleteActionItem);
+app.get('/getActionItemsInformationForGraph', actionDiscussion.getActionItemsInformationForGraph);
 
 app.post('/postMeeting',address.postMeeting);
 app.put('/updateMeeting',address.updateMeeting);
