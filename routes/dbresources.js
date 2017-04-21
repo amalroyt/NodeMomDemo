@@ -6,7 +6,7 @@ module.exports = {
     name: 'domo_mom_db',
     host: 'root',
     server: '',
-    password: 'root',
+    password: 'password',
     port: 3306,
     engine: 'INNODB',
     charset: 'utf8',

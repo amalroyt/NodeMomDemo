@@ -48,7 +48,7 @@ exports.moreDetailsAction = function(req, res) {
 
 exports.moreDetailsHistory = function(req, res) {
   var meetingId = req.params.meetingId;
-  var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+  var filePath = 'C:/Users/rutujas/Desktop/My_Backup/FINAL/BackEnd/NodeMomDemo/excelData/';
   if (fs.existsSync(filePath + 'meeting_' + meetingId)) {
     fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
       var date;
@@ -71,7 +71,7 @@ exports.moreDetailsHistory = function(req, res) {
 
 exports.downloadPrev = function(req, res) {
   var fileName = JSON.parse(req.params.download);
-  var filePath = 'D:/Angular2MOM/NodeMomDemo/excelData/';
+  var filePath = 'C:/Users/rutujas/Desktop/My_Backup/FINAL/BackEnd/NodeMomDemo/excelData/';
   var thisPath = path.resolve(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName);
   res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.download(thisPath);

@@ -24,12 +24,19 @@ exports.preAuthorization = function(req, res) {
             exp: Math.floor(Date.now() / 1000) + 60 * 10,
             iat: Math.floor(Date.now() / 1000)
           }, thesecret);
+          var isAdmin;
+          if ( results[0].role == 3 ) {
+            isAdmin = true;
+          }
+          else {
+            isAdmin = false;
+          }
           /*Creating new token variable with the expiry parameter seperate
           so that the expiry parameter is not available client side.*/
           var newToken = {
               'token': token,
               'exp': Math.floor(Date.now() / 1000) + 60 * 10,
-              'userDetails': [{'firstName':results[0].firstName,'lastName':results[0].lastName,'userId':results[0].id}]
+              'userDetails': [{'firstName':results[0].firstName,'lastName':results[0].lastName,'isAdmin':isAdmin}]
             }
             //Insert values into token table.
           sequelize.query("INSERT INTO domo_token (token,expiryTime) VALUES ('" + newToken.token + "', from_unixtime('" + newToken.exp + "'))", {
@@ -40,7 +47,6 @@ exports.preAuthorization = function(req, res) {
               type: sequelize.QueryTypes.INSERT
             }).then(function(users) {})
             //Setting token in the response.
-            //res.set({'access_token':token});
           res.status(200).send(newToken);
         } else {
           res.status(401);
@@ -59,5 +65,22 @@ var token = req.body.token;
       type: sequelize.QueryTypes.DELETE
     }).then(function(users) {
         res.end();
+    })
+}
+
+exports.postAuthorization = function(req, res) {
+var userId = req.params.userId,
+    isAdmin;
+  sequelize.query("SELECT role FROM domo_users WHERE id = '" + userId + "' ", {
+      type: sequelize.QueryTypes.SELECT
+    }).then(function(results) {
+        if (results[0].role == 3) {
+          isAdmin = true;
+        }
+        else {
+          isAdmin = false;
+        }
+        console.log("isAdmin  "+isAdmin);
+        res.send(isAdmin);
     })
 }
