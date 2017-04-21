@@ -244,7 +244,6 @@ exports.deleteActionItem = function(req, res) {
 
 
 exports.getActionItemsInformationForGraph = function(req, res) {
-
       sequelize.query("SELECT CONCAT_WS(' ',t1.firstName,t1.lastName) as userName, t3.meetingTitle, avg(5  (DATEDIFF(t2.actualCompletion, t2.openSince) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7  WEEKDAY(t2.openSince) + WEEKDAY(t2.actualCompletion) + 1, 1)) as dateDiff from domo_users as t1 RIGHT JOIN domo_meeting_action as t2 on t2.responsible = t1.id LEFT JOIN domo_meeting_master as t3 on t2.meetingId = t3.meetingId group by t1.id, t2.meetingId", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
