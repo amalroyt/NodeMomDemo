@@ -126,7 +126,7 @@ exports.generateExcel = function(req, res) {
             var xls = json2xls(meetingMaster);
             //To check if file is to generated for the first time or not.
 
-            var ititialDir = 'D:/NodeMomDemo/excelData/';
+            var ititialDir = 'D:/DemoApp/NodeMomDemo/excelData/';
 
             if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
                 fs.mkdirSync(ititialDir + 'meeting_' + meetingId);
