@@ -71,7 +71,7 @@ exports.moreDetailsHistory = function(req, res) {
 
 exports.downloadPrev = function(req, res) {
   var fileName = JSON.parse(req.params.download);
-  var filePath = 'D:/NodeMomDemo/excelData/';
+  var filePath = 'D:/DemoApp/NodeMomDemo/excelData/';
   var thisPath = path.resolve(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName);
   res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.download(thisPath);
