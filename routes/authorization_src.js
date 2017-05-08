@@ -36,7 +36,7 @@ exports.preAuthorization = function(req, res) {
           var newToken = {
               'token': token,
               'exp': Math.floor(Date.now() / 1000) + 60 * 10,
-              'userDetails': [{'firstName':results[0].firstName,'lastName':results[0].lastName,'isAdmin':isAdmin}]
+              'userDetails': [{'firstName':results[0].firstName,'lastName':results[0].lastName,'isAdmin':isAdmin, 'userId':results[0].id}]
             }
             //Insert values into token table.
           sequelize.query("INSERT INTO domo_token (token,expiryTime) VALUES ('" + newToken.token + "', from_unixtime('" + newToken.exp + "'))", {

@@ -23,7 +23,7 @@ exports.generateExcel = function(req, res) {
       });
     }
   }
-  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,group_concat(' ',f.firstName,' ',f.lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) INNER JOIN domo_users AS f on t1.meetingFacilitator = f.id INNER JOIN domo_users AS r on  t1.meetingRecorder = r.id INNER JOIN domo_meeting_type on t1.meetingType = domo_meeting_type.id WHERE t1.meetingId = '" + meetingId + "'", {
+  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,group_concat(' ',t2.firstName,' ',t2.lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) INNER JOIN domo_users AS f on t1.meetingFacilitator = f.id INNER JOIN domo_users AS r on  t1.meetingRecorder = r.id INNER JOIN domo_meeting_type on t1.meetingType = domo_meeting_type.id WHERE t1.meetingId = '" + meetingId + "'", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
