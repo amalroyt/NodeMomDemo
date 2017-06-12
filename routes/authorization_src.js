@@ -80,7 +80,6 @@ var userId = req.params.userId,
         else {
           isAdmin = false;
         }
-        console.log("isAdmin  "+isAdmin);
         res.send(isAdmin);
     })
 }
