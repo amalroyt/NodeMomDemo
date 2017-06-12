@@ -6,6 +6,7 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', 'angular-cli'],
     plugins: [
+      require('karma-coverage'),
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-remap-istanbul'),
@@ -30,9 +31,11 @@ module.exports = function (config) {
       config: './angular-cli.json',
       environment: 'dev'
     },
+    // optionally, configure the reporter
     reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'karma-remap-istanbul']
-              : ['progress'],
+              ? ['progress', 'karma-remap-istanbul','coverage']
+              : ['progress','karma-remap-istanbul'],
+    coverageReporter: { type: 'json' },
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

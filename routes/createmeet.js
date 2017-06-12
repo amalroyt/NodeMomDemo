@@ -3,7 +3,6 @@ var sequelize = require("./dbconfiguration").sequelize; //import sequelize datab
 
  exports.checkIfAllItemsClosed = function(req, res) {
     var meetingId = req.params.id;
-    console.log(meetingId);
     sequelize.query("SELECT status FROM domo_meeting_action WHERE meetingId=" + meetingId , {
       type: sequelize.QueryTypes.SELECT
     }).then(function(results) {
@@ -115,7 +114,7 @@ exports.getFirstName = function(req, res) {
   sequelize.query(query_fname, {
     type: sequelize.QueryTypes.SELECT
   }).then(function(rec_rows) {
-    
+
     res.format({
       json: function() {
 
@@ -132,7 +131,6 @@ exports.getFirstName = function(req, res) {
 }
 
 exports.postMeeting = function(req, res) {
-  console.log(req.body);
   var createMeet = req.body;
   var userId = JSON.parse(createMeet[0]);
   var meet = JSON.parse(createMeet[1])
@@ -154,7 +152,6 @@ exports.postMeeting = function(req, res) {
     endForm: meet.endForm,
     duration: meet.duration
   }
-  console.log(meeting);
   var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingPurpose,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active,createdBy,createdDate,startForm,endForm,duration)";
   query += "VALUES (";
   //query += meeting.id + ",";
@@ -290,8 +287,6 @@ exports.updateMeeting = function(req, res) {
     }
 
   }
-  console.log(meeting.startTime.length);
-  console.log(meeting);
   var query = "UPDATE domo_meeting_master SET";
   //query += meeting.id + ",";
   query += " " + "meetingStatus=" + meeting.status + ",";

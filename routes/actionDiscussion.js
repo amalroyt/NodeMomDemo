@@ -69,15 +69,10 @@ exports.getTypes = function(req, res) {
 
 //This function will write the data to the database using INSERT statement.
 exports.discussionPoints = function(req, res) {
-  console.log(req.body);
   var user = req.body;
   var id = user[0];
-  console.log(id);
   var userValues = JSON.parse(user[1]);
   var userId = user[2];
-  console.log(userId);
-  console.log(userValues);
-  console.log(userValues.discussionBy);
   var query = "INSERT INTO domo_meeting_points (meetingId,discussionBy,discussionType,discussion,decisionBy,decision,createdBy,createdDate)";
   query += "VALUES (";
   query += " '" + id + "',";
@@ -107,7 +102,6 @@ exports.discussionPoints = function(req, res) {
 // to delete selected database row from discussion table
 exports.deleteDiscussionPoints = function(req, res) {
   var trackIndex = req.params.trackIndex;
-  console.log(trackIndex);
   sequelize.query(" UPDATE domo_meeting_points SET active = '1' WHERE id IN ("+trackIndex+")", {
     type: sequelize.QueryTypes.UPDATE
   }).then(function(results) {
@@ -159,14 +153,10 @@ exports.getStatus = function(req, res) {
 
 //This function will write the data to the database using INSERT statement.
 exports.actionItems = function(req, res) {
-  console.log(req.body);
   var user = req.body;
   var id = user[0];
-  console.log(id);
   var userValues = JSON.parse(user[1]);
   var userId = user[2];
-  console.log(userId);
-  console.log(userValues);
 
   if (userValues.status == 2) {
     var query = "INSERT INTO domo_meeting_action (meetingId,actionDesc,responsible,openSince,expectedCompletion,actualCompletion,status,createdBy,createdDate)";
@@ -226,7 +216,6 @@ exports.actionItems = function(req, res) {
 // to delete selected database row from action table
 exports.deleteActionItem = function(req, res) {
   var trackIndex = req.params.trackIndex;
-  console.log(trackIndex);
   sequelize.query(" UPDATE domo_meeting_action SET active = '1' WHERE id IN ("+trackIndex+")", {
     type: sequelize.QueryTypes.UPDATE
   }).then(function(results) {
@@ -242,9 +231,11 @@ exports.deleteActionItem = function(req, res) {
 
 /**************************************ACTION********************************************/
 
-
 exports.getActionItemsInformationForGraph = function(req, res) {
-    sequelize.query("SELECT CONCAT_WS(' ',t1.firstName,t1.lastName) as userName, t3.meetingTitle, avg(5 * (DATEDIFF(t2.actualCompletion, t2.openSince) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(t2.openSince) + WEEKDAY(t2.actualCompletion) + 1, 1)) as dateDiff from domo_users as t1 RIGHT JOIN domo_meeting_action as t2 on t2.responsible = t1.id LEFT JOIN domo_meeting_master as t3 on t2.meetingId = t3.meetingId group by t1.id, t2.meetingId", {
+  var startDateValue = JSON.parse(req.params.startDateVal);
+  var newStartDate = startDateValue.startDate;
+  var startDate = newStartDate + ' 00:00:00';
+    sequelize.query("SELECT CONCAT_WS(' ',t1.firstName,t1.lastName) as userName, t3.meetingTitle, avg(5 * (DATEDIFF(t2.actualCompletion, t2.openSince) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(t2.openSince) + WEEKDAY(t2.actualCompletion) + 1, 1)) as dateDiff from domo_users as t1 RIGHT JOIN domo_meeting_action as t2 on t2.responsible = t1.id LEFT JOIN domo_meeting_master as t3 on t2.meetingId = t3.meetingId WHERE t3.meetingDate >=  '" + startDate + "' group by t1.id, t2.meetingId", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
