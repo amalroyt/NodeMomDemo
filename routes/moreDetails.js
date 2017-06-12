@@ -48,7 +48,7 @@ exports.moreDetailsAction = function(req, res) {
 
 exports.moreDetailsHistory = function(req, res) {
   var meetingId = req.params.meetingId;
-  var filePath = 'D:/DemoApp/NodeMomDemo/excelData/';
+  var filePath = 'D:/NodeMomDemo/excelData/';
   if (fs.existsSync(filePath + 'meeting_' + meetingId)) {
     fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
       var date;

@@ -20,7 +20,7 @@ var counts = [];
 }
  exports.showmoredetails = function(req, res) {
    console.log(req.params.id);
-    sequelize.query("SELECT m.meetingId, m.meetingTitle, d.meetingType from domo_meeting_master m join domo_meeting_type d on (m.meetingType = d.id) WHERE m.meetingDate = '" + req.params.id +"'",{
+    sequelize.query("SELECT m.meetingId, m.meetingTitle, d.meetingType , DATE_FORMAT(m.meetingDate, '%d-%m-%Y') as meetingDate from domo_meeting_master m join domo_meeting_type d on (m.meetingType = d.id) WHERE m.meetingDate = '" + req.params.id +"'",{
       type: sequelize.QueryTypes.SELECT
     }).then(function(results) {
       res.format({
