@@ -4,7 +4,7 @@
 module.exports = {
   database: {
     name: 'domo_mom_db',
-    host: 'root',
+    host: 'localhost',
     server: '127.0.0.1',
     password: 'root',
     port: 3306,
