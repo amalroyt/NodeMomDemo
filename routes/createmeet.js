@@ -24,9 +24,7 @@ exports.getMeetingTypes = function(req, res) {
   }).then(function(status_rows) {
     res.format({
       json: function() {
-
         res.send(status_rows);
-
       }
     });
   }).error(function(error) {
@@ -41,10 +39,7 @@ exports.getAttendees = function(req, res) {
   }).then(function(att_rows) {
     res.format({
       json: function() {
-
         res.send(att_rows);
-
-
       }
     });
   }).error(function(error) {
@@ -59,10 +54,7 @@ exports.getAttendeesbyId = function(req, res) {
   }).then(function(attbyid_rows) {
     res.format({
       json: function() {
-
         res.send(attbyid_rows);
-
-
       }
     });
   }).error(function(error) {
@@ -80,10 +72,7 @@ exports.getFaci = function(req, res) {
   }).then(function(faci_rows) {
     res.format({
       json: function() {
-
         res.send(faci_rows);
-
-
       }
     });
   }).error(function(error) {
@@ -98,10 +87,7 @@ exports.getRec = function(req, res) {
   }).then(function(rec_rows) {
     res.format({
       json: function() {
-
         res.send(rec_rows);
-
-
       }
     });
   }).error(function(error) {
@@ -114,32 +100,25 @@ exports.getFirstName = function(req, res) {
   sequelize.query(query_fname, {
     type: sequelize.QueryTypes.SELECT
   }).then(function(rec_rows) {
-
     res.format({
       json: function() {
-
         res.send(rec_rows);
-
-
       }
     });
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
-
-
 }
 
 exports.postMeeting = function(req, res) {
   var createMeet = req.body;
   var userId = JSON.parse(createMeet[0]);
-  var meet = JSON.parse(createMeet[1])
+  var meet = JSON.parse(createMeet[1]);
   var meeting = {
     //id: req.body.meeting_id,
     status: meet.status,
     type: meet.type,
     title: meet.title,
-    purpose: meet.purpose,
     facilitator: meet.facilitator,
     recorder: meet.recorder,
     venue: meet.venue,
@@ -152,13 +131,12 @@ exports.postMeeting = function(req, res) {
     endForm: meet.endForm,
     duration: meet.duration
   }
-  var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingPurpose,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active,createdBy,createdDate,startForm,endForm,duration)";
+  var query = "INSERT INTO domo_meeting_master (meetingStatus,meetingType,meetingTitle,meetingFacilitator,meetingRecorder,meetingVenue,meetingDate,startTime,endTime,meetingAgenda,meetingAttendees,active,createdBy,createdDate,startForm,endForm,duration)";
   query += "VALUES (";
   //query += meeting.id + ",";
   query += " '" + meeting.status + "',";
   query += " '" + meeting.type + "',";
   query += " '" + meeting.title + "',";
-  query += " '" + meeting.purpose + "',";
   query += " '" + meeting.facilitator + "',";
   query += " '" + meeting.recorder + "',";
   query += " '" + meeting.venue + "',";
@@ -186,7 +164,6 @@ exports.postMeeting = function(req, res) {
         json: function() {
           res.send(rows);
           console.log("Inserted");
-
         }
       });
     }).error(function(error) {
@@ -240,18 +217,14 @@ exports.getMeetingInfo = function(req, res) {
 exports.updateMeeting = function(req, res) {
   var editMeet = req.body;
   var userId = JSON.parse(editMeet[0]);
-
   var meet = JSON.parse(editMeet[1]);
-
   //console.log(meet.startTime.length);
   if (((meet.startTime.length) < 8) && ((meet.endTime.length) < 8)) {
-
     var meeting = {
       id: meet.id,
       status: meet.status,
       type: meet.type,
       title: meet.title,
-      purpose: meet.purpose,
       facilitator: meet.facilitator,
       recorder: meet.recorder,
       venue: meet.venue,
@@ -271,7 +244,6 @@ exports.updateMeeting = function(req, res) {
       status: meet.status,
       type: meet.type,
       title: meet.title,
-      purpose: meet.purpose,
       facilitator: meet.facilitator,
       recorder: meet.recorder,
       venue: meet.venue,
@@ -292,7 +264,6 @@ exports.updateMeeting = function(req, res) {
   query += " " + "meetingStatus=" + meeting.status + ",";
   query += " " + "meetingType=" + meeting.type + ",";
   query += " " + "meetingTitle='" + meeting.title + "',";
-  query += " " + "meetingPurpose='" + meeting.purpose + "',";
   query += " " + "meetingFacilitator=" + meeting.facilitator + ",";
   query += " " + "meetingRecorder=" + meeting.recorder + ",";
   query += " " + "meetingVenue='" + meeting.venue + "',";
@@ -320,7 +291,6 @@ exports.updateMeeting = function(req, res) {
         json: function() {
           //res.send(rows);
           console.log("Updated");
-
         }
       });
     }).error(function(error) {

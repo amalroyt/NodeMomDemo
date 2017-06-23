@@ -1,6 +1,7 @@
 var sequelize = require("./dbconfiguration").sequelize;
 var json2xls = require('json2xls');
 var fs = require('fs');
+var shell = require('shelljs');
 exports.generateExcel = function(req, res) {
   var meetingMaster = [];
   var meetingId = req.params.meetingId;
@@ -126,10 +127,10 @@ exports.generateExcel = function(req, res) {
             var xls = json2xls(meetingMaster);
             //To check if file is to generated for the first time or not.
 
-            var ititialDir = 'D:/DemoApp/NodeMomDemo/excelData/';
-
+            var ititialDir = './excelData/';
+            console.log('before mkdir'+ititialDir+'   '+meetingId);
             if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
-                fs.mkdirSync(ititialDir + 'meeting_' + meetingId);
+                shell.mkdir('-p', ititialDir + 'meeting_' + meetingId);
             }
               fs.writeFileSync('excelData/' + 'meeting_' + meetingId + '/' + Math.floor(Date.now() / 1000) + '.xlsx', xls, 'binary');
               sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 1 where meetingId = '" + meetingId + "' LIMIT 1  ", {
