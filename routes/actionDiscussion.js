@@ -90,7 +90,12 @@ exports.discussionPoints = function(req, res) {
     res.format({
       json: function() {
         console.log("Inserted into discussion table");
-        //res.send(results);
+        sequelize.query(" INSERT INTO domo_tasklogs (task, onTable, meetingId, updatedBy, updatedDate) VALUES ('Insert', 'domo_meeting_points', '" + id + "','" + userId + "', curdate())", {
+          type: sequelize.QueryTypes.INSERT
+        }).then(function(results) {})
+        sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 WHERE meetingId = '" + id + "'", {
+         type: sequelize.QueryTypes.UPDATE
+       }).then(function(results) {})
         res.end();
       }
     });
@@ -177,7 +182,12 @@ exports.actionItems = function(req, res) {
         json: function() {
           console.log("Inserted into action table");
           res.end();
-          //res.send(results);
+          sequelize.query(" INSERT INTO domo_tasklogs (task, onTable, meetingId, updatedBy, updatedDate) VALUES ('Insert', 'domo_meeting_action', '" + id + "','" + userId + "', curdate())", {
+            type: sequelize.QueryTypes.INSERT
+          }).then(function(results) {})
+          sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 WHERE meetingId = '" + id + "'", {
+           type: sequelize.QueryTypes.UPDATE
+         }).then(function(results) {})
         }
       });
     }).error(function(error) {
