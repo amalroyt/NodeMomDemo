@@ -3,7 +3,7 @@ const fs = require('fs');
 exports.downloadExcel = function(req, res) {
   var meetingId = req.params.meetingId;
 
-  var filePath = './MoM/excelData/';
+  var filePath = './excelData/';
 
   fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
     var patt = /[\d]{10}/g;

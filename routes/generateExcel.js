@@ -24,7 +24,7 @@ exports.generateExcel = function(req, res) {
       });
     }
   }
-  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,meetingPurpose,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,group_concat(' ',t2.firstName,' ',t2.lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) INNER JOIN domo_users AS f on t1.meetingFacilitator = f.id INNER JOIN domo_users AS r on  t1.meetingRecorder = r.id INNER JOIN domo_meeting_type on t1.meetingType = domo_meeting_type.id WHERE t1.meetingId = '" + meetingId + "'", {
+  sequelize.query(" SELECT meetingStatus,domo_meeting_type.meetingType,meetingTitle,f.firstName AS meetingFacilitator,r.firstName AS meetingRecorder,meetingVenue,Date_FORMAT(meetingDate, '%d-%m-%Y') AS meetingDate,startTime,endTime,meetingAgenda,group_concat(' ',t2.firstName,' ',t2.lastName) as meetingAttendees FROM domo_meeting_master as t1 LEFT JOIN domo_users as t2 ON find_in_set(t2.id, t1.meetingAttendees) INNER JOIN domo_users AS f on t1.meetingFacilitator = f.id INNER JOIN domo_users AS r on  t1.meetingRecorder = r.id INNER JOIN domo_meeting_type on t1.meetingType = domo_meeting_type.id WHERE t1.meetingId = '" + meetingId + "'", {
     type: sequelize.QueryTypes.SELECT
   }).then(function(results) {
     res.format({
@@ -39,30 +39,28 @@ exports.generateExcel = function(req, res) {
           a: 'Status',
           b: 'meetingType',
           c: 'Title',
-          d: 'Purpose',
-          e: 'Facilitator',
-          f: 'Recorder',
-          g: 'Venue',
-          h: 'Date',
-          i: 'startTime',
-          j: 'endTime',
-          k: 'Agenda',
-          l: 'Attendees'
+          d: 'Facilitator',
+          e: 'Recorder',
+          f: 'Venue',
+          g: 'Date',
+          h: 'startTime',
+          i: 'endTime',
+          j: 'Agenda',
+          k: 'Attendees'
         }];
         //Pushing data for the meetingMaster
         meetingMaster.push({
           a: results[0].meetingStatus,
           b: results[0].meetingType,
           c: results[0].meetingTitle,
-          d: results[0].meetingPurpose,
-          e: results[0].meetingFacilitator,
-          f: results[0].meetingRecorder,
-          g: results[0].meetingVenue,
-          h: results[0].meetingDate,
-          i: results[0].startTime,
-          j: results[0].endTime,
-          k: results[0].meetingAgenda,
-          l: results[0].meetingAttendees
+          d: results[0].meetingFacilitator,
+          e: results[0].meetingRecorder,
+          f: results[0].meetingVenue,
+          g: results[0].meetingDate,
+          h: results[0].startTime,
+          i: results[0].endTime,
+          j: results[0].meetingAgenda,
+          k: results[0].meetingAttendees
         });
         spacingFunc();
       }
@@ -125,10 +123,9 @@ exports.generateExcel = function(req, res) {
               });
             }
             var xls = json2xls(meetingMaster);
-            //To check if file is to generated for the first time or not.
 
+            //To check if file is to generated for the first time or not.
             var ititialDir = './excelData/';
-            console.log('before mkdir'+ititialDir+'   '+meetingId);
             if (!fs.existsSync(ititialDir + 'meeting_' + meetingId)){
                 shell.mkdir('-p', ititialDir + 'meeting_' + meetingId);
             }

@@ -62,9 +62,6 @@ exports.getAttendeesbyId = function(req, res) {
   });
 }
 
-
-
-
 exports.getFaci = function(req, res) {
   var query_facilitator = "SELECT id,CONCAT_WS(' ',firstName,lastName) as firstlast FROM domo_users";
   sequelize.query(query_facilitator, {
@@ -110,6 +107,7 @@ exports.getFirstName = function(req, res) {
   });
 }
 
+//To create new meeting
 exports.postMeeting = function(req, res) {
   var createMeet = req.body;
   var userId = JSON.parse(createMeet[0]);
@@ -214,6 +212,8 @@ exports.getMeetingInfo = function(req, res) {
     console.log("Query Error: " + error);
   });
 };
+
+//To update meeting
 exports.updateMeeting = function(req, res) {
   var editMeet = req.body;
   var userId = JSON.parse(editMeet[0]);
@@ -289,8 +289,11 @@ exports.updateMeeting = function(req, res) {
     }).then(function(rows) {
       res.format({
         json: function() {
-          //res.send(rows);
-          console.log("Updated");
+          sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 WHERE meetingId = '" + meet.id + "'", {
+           type: sequelize.QueryTypes.UPDATE
+         }).then(function(results) {
+           res.end();
+         })
         }
       });
     }).error(function(error) {
