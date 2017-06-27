@@ -71,7 +71,7 @@ CREATE TABLE `domo_meeting_action` (
   CONSTRAINT `domo_mom_fk_meetinId` FOREIGN KEY (`meetingId`) REFERENCES `domo_meeting_master` (`meetingId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_fk_responsible` FOREIGN KEY (`responsible`) REFERENCES `domo_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_fk_status` FOREIGN KEY (`status`) REFERENCES `domo_meeting_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `domo_meeting_master` (
   CONSTRAINT `domo_mom_meeting_fk_recorder` FOREIGN KEY (`meetingRecorder`) REFERENCES `domo_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_meeting_fk_status` FOREIGN KEY (`meetingStatus`) REFERENCES `domo_meeting_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_meeting_fk_type` FOREIGN KEY (`meetingType`) REFERENCES `domo_meeting_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,6 +131,7 @@ CREATE TABLE `domo_meeting_master` (
 
 LOCK TABLES `domo_meeting_master` WRITE;
 /*!40000 ALTER TABLE `domo_meeting_master` DISABLE KEYS */;
+INSERT INTO `domo_meeting_master` VALUES (1,1,1,'Demo101',1,1,'CT1-2-6240A','2017-06-26','03:00:00','05:00:00','Trail run 1','1,2,3,4,5,6,7,8,9,10',0,0,1,'2017-06-26','PM','PM','02','undefined'),(2,1,1,'Demo102',1,1,'CT1-2-6240A','2017-06-26','04:00:00','05:00:00','Trial run 2','1,2,3,4,5,6,7,8,9,10',1,0,1,'2017-06-26','PM','PM','01','undefined'),(3,1,1,'Demo103',2,5,'CT1-2-6240A','2017-06-26','05:30:00','06:30:00','Trial run 3','1,2,3,4,5,6,7,8,9,10',1,0,1,'2017-06-26','PM','PM','01','undefined'),(4,2,2,'Demo104',1,4,'CT1-2-6240A','2017-06-26','04:30:00','05:30:00','sdsdsdsd','1,2,3,4,5,6,7,8,9,10',1,0,1,'2017-06-26','PM','PM','01','undefined'),(5,1,1,'Demo104',1,1,'CT1-2-6240A','2017-06-27','05:15:00','06:15:00','Trial 5678','1,2,3,4,5,6,8,9,10',0,0,7,'2017-06-27','PM','PM','01','undefined');
 /*!40000 ALTER TABLE `domo_meeting_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +162,7 @@ CREATE TABLE `domo_meeting_points` (
   CONSTRAINT `domo_mom_fk_discussedBy` FOREIGN KEY (`discussionBy`) REFERENCES `domo_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_fk_discussionType` FOREIGN KEY (`discussionType`) REFERENCES `domo_discussion_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_fk_meetingId` FOREIGN KEY (`meetingId`) REFERENCES `domo_meeting_master` (`meetingId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,6 +171,7 @@ CREATE TABLE `domo_meeting_points` (
 
 LOCK TABLES `domo_meeting_points` WRITE;
 /*!40000 ALTER TABLE `domo_meeting_points` DISABLE KEYS */;
+INSERT INTO `domo_meeting_points` VALUES (1,2,4,1,'Trial run 1',0,1,'Trial',1,'2017-06-26'),(2,1,7,3,'Trial run 2',0,2,'Trial',1,'2017-06-26'),(3,3,10,1,'Trial 3GGGG',0,9,'Trial',1,'2017-06-26'),(4,5,2,4,'Trial',0,3,'Trial',7,'2017-06-27');
 /*!40000 ALTER TABLE `domo_meeting_points` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,7 +242,7 @@ CREATE TABLE `domo_tasklogs` (
   KEY `domo_mom_fk_tasklogs_meetingId_idx` (`meetingId`),
   CONSTRAINT `domo_mom_fk_tasklogs_meetingId` FOREIGN KEY (`meetingId`) REFERENCES `domo_meeting_master` (`meetingId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `domo_mom_fk_tasklogs_updatedBy` FOREIGN KEY (`updatedBy`) REFERENCES `domo_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +251,37 @@ CREATE TABLE `domo_tasklogs` (
 
 LOCK TABLES `domo_tasklogs` WRITE;
 /*!40000 ALTER TABLE `domo_tasklogs` DISABLE KEYS */;
+INSERT INTO `domo_tasklogs` VALUES (1,'Update','domo_meeting_points',2,1,'2017-06-26'),(2,'Insert','domo_meeting_points',3,1,'2017-06-26'),(3,'Update','domo_meeting_points',1,1,'2017-06-26'),(4,'Update','domo_meeting_master',3,1,'2017-06-26'),(5,'Update','domo_meeting_master',3,1,'2017-06-26'),(6,'Update','domo_meeting_master',3,1,'2017-06-26'),(7,'Update','domo_meeting_master',3,1,'2017-06-26'),(8,'Update','domo_meeting_master',3,1,'2017-06-26'),(9,'Update','domo_meeting_master',3,1,'2017-06-26'),(10,'Update','domo_meeting_master',3,1,'2017-06-26'),(11,'Update','domo_meeting_master',1,1,'2017-06-26'),(12,'Update','domo_meeting_master',1,1,'2017-06-26'),(13,'Update','domo_meeting_master',1,1,'2017-06-26'),(14,'Update','domo_meeting_master',3,1,'2017-06-26'),(15,'Update','domo_meeting_master',2,1,'2017-06-26'),(16,'Update','domo_meeting_master',3,1,'2017-06-26'),(17,'Update','domo_meeting_master',2,1,'2017-06-26'),(18,'Update','domo_meeting_master',1,1,'2017-06-26'),(19,'Update','domo_meeting_points',3,1,'2017-06-26'),(20,'Update','domo_meeting_points',1,1,'2017-06-26'),(21,'Update','domo_meeting_points',3,1,'2017-06-26'),(22,'Update','domo_meeting_points',3,1,'2017-06-26'),(23,'Update','domo_meeting_points',3,1,'2017-06-26'),(24,'Update','domo_meeting_points',3,1,'2017-06-26'),(25,'Update','domo_meeting_master',4,1,'2017-06-26'),(26,'Update','domo_meeting_master',5,7,'2017-06-27'),(27,'Insert','domo_meeting_points',5,7,'2017-06-27'),(28,'Update','domo_meeting_points',5,7,'2017-06-27');
 /*!40000 ALTER TABLE `domo_tasklogs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `domo_token`
+--
+
+DROP TABLE IF EXISTS `domo_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `domo_token` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(200) DEFAULT NULL,
+  `expiryTime` timestamp NULL DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `createdDate` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `domo_mom_fk_token_createdBy_idx` (`createdBy`),
+  CONSTRAINT `domo_mom_fk_token_createdBy` FOREIGN KEY (`createdBy`) REFERENCES `domo_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=233 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `domo_token`
+--
+
+LOCK TABLES `domo_token` WRITE;
+/*!40000 ALTER TABLE `domo_token` DISABLE KEYS */;
+INSERT INTO `domo_token` VALUES (232,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1Mzc3LCJleHAiOjE0OTg1NDEyNDUsImlhdCI6MTQ5ODU0MDY0NX0.Z6tMCQDFIIm6xsnPAegVFED0-NJEjTvVlmAouG41ykY','2017-06-27 05:27:25',NULL,NULL);
+/*!40000 ALTER TABLE `domo_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -267,7 +299,7 @@ CREATE TABLE `domo_userlogs` (
   `loginTime` timestamp NULL DEFAULT NULL,
   `token` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,6 +308,7 @@ CREATE TABLE `domo_userlogs` (
 
 LOCK TABLES `domo_userlogs` WRITE;
 /*!40000 ALTER TABLE `domo_userlogs` DISABLE KEYS */;
+INSERT INTO `domo_userlogs` VALUES (1,'7',1,'2017-06-27','2017-06-27 05:17:25','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1Mzc3LCJleHAiOjE0OTg1NDEyNDUsImlhdCI6MTQ5ODU0MDY0NX0.Z6tMCQDFIIm6xsnPAegVFED0-NJEjTvVlmAouG41ykY');
 /*!40000 ALTER TABLE `domo_userlogs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,7 +354,7 @@ CREATE TABLE `domo_users` (
   `role` int(11) DEFAULT NULL,
   `active` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COMMENT='User information';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COMMENT='User information';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,4 +376,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-23 15:37:32
+-- Dump completed on 2017-06-27 10:52:34
