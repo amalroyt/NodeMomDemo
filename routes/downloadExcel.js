@@ -8,12 +8,18 @@ exports.downloadExcel = function(req, res) {
   fs.readdir(filePath + 'meeting_' + meetingId, (err, files) => {
     var patt = /[\d]{10}/g;
     var diffArray = [];
-    files.forEach(file => {
-      diffArray.push({
-        timeStamp: Number(file.match(patt)),
-        fileName: file
+    if (files) {
+      files.forEach(file => {
+        diffArray.push({
+          timeStamp: Number(file.match(patt)),
+          fileName: file
+        });
       });
-    });
+    } else {
+      res.status(404);
+      res.send();
+      return;
+    }
     var startValue = 0;
     for (var i = 0; i < diffArray.length; i++) {
       if (diffArray[i].timeStamp > startValue) {
