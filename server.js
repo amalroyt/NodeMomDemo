@@ -78,7 +78,7 @@ app.get('/getMeetingTypes',address.getMeetingTypes);
 app.get('/getAttendees',address.getAttendees);
 app.get('/getAttendees/:id',address.getAttendeesbyId);
 app.get('/getFaci',address.getFaci);
-app.get('/getRec',address.getRec);
+app.get('/getRec/:userId',address.getRec);
 app.delete('/deleteMeet/:id',address.deleteMeet);
 app.get('/checkIfAllItemsClosed/:id',address.checkIfAllItemsClosed);
 app.get('/generateheatmap',d3.generateheatmap);

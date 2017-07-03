@@ -78,7 +78,8 @@ exports.getFaci = function(req, res) {
 }
 
 exports.getRec = function(req, res) {
-  var query_recorder = "SELECT id,CONCAT_WS(' ',firstName,lastName) as firstlast FROM domo_users";
+  var userId =req.params.userId;
+  var query_recorder = "SELECT id,CONCAT_WS(' ',firstName,lastName) as firstlast FROM domo_users where id !='" + req.params.userId + "'";
   sequelize.query(query_recorder, {
     type: sequelize.QueryTypes.SELECT
   }).then(function(rec_rows) {
