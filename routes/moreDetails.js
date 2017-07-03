@@ -72,7 +72,16 @@ exports.moreDetailsHistory = function(req, res) {
 exports.downloadPrev = function(req, res) {
   var fileName = JSON.parse(req.params.download);
   var filePath = './excelData/';
-  var thisPath = path.resolve(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName);
-  res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.download(thisPath);
+  if (fs.existsSync(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName)) {
+    var thisPath = path.resolve(filePath + 'meeting_' + fileName.meetingId + '/' + fileName.fileName);
+    res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.download(thisPath);
+  } else {
+    sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 where meetingId = '" + fileName.meetingId + "' LIMIT 1  ", {
+      type: sequelize.QueryTypes.UPDATE
+    }).then(function(results) {
+      res.status(404);
+      res.end();
+    })
+  }
 };
