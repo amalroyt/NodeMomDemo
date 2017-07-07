@@ -6,6 +6,12 @@ exports.preAuthorization = function(req, res) {
   var name = req.body.userName;
   var password = req.body.userPassword;
   var user;
+  //Removing special characters from input credentials
+  var newName = name.replace(/[^\w]/gi, '');
+  var newPassword = password.replace(/[^\w@]/gi, '');
+
+  //To check if the user is trying to do any undesired moves
+  if ( newName === name && newPassword === password ) {
   //Use query method to get the data from sever
   sequelize.query(" SELECT * FROM domo_users WHERE userName = '" + name + "' AND password = '" + password + "' LIMIT 1 ", {
     type: sequelize.QueryTypes.SELECT
@@ -57,6 +63,11 @@ exports.preAuthorization = function(req, res) {
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
+}
+else {
+  res.status(401);
+  res.send();
+}
 };
 
 exports.preLogout = function(req, res) {

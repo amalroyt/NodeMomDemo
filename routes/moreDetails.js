@@ -77,11 +77,7 @@ exports.downloadPrev = function(req, res) {
     res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.download(thisPath);
   } else {
-    sequelize.query(" UPDATE domo_meeting_master SET generatedExcel = 0 where meetingId = '" + fileName.meetingId + "' LIMIT 1  ", {
-      type: sequelize.QueryTypes.UPDATE
-    }).then(function(results) {
       res.status(404);
       res.end();
-    })
   }
 };

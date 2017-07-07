@@ -162,7 +162,6 @@ exports.postMeeting = function(req, res) {
       res.format({
         json: function() {
           res.send(rows);
-          console.log("Inserted");
         }
       });
     }).error(function(error) {
@@ -178,7 +177,6 @@ exports.deleteMeet = function(req, res) {
     type: sequelize.QueryTypes.DELETE
   }).then(function() {
     res.send(req.params);
-    console.log("Deleted")
   }).error(function(error) {
     console.log("Query Error: " + error);
   });
@@ -219,7 +217,6 @@ exports.updateMeeting = function(req, res) {
   var editMeet = req.body;
   var userId = JSON.parse(editMeet[0]);
   var meet = JSON.parse(editMeet[1]);
-  //console.log(meet.startTime.length);
   if (((meet.startTime.length) < 8) && ((meet.endTime.length) < 8)) {
     var meeting = {
       id: meet.id,
