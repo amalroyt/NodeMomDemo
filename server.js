@@ -23,7 +23,8 @@ var express = require('express'),
   d3 = require('./routes/heatmap'),
   actionDiscussion = require('./routes/actionDiscussion'),
   updateDetails = require('./routes/updateDetails'),
-  quarterMeetings = require('./routes/d3Graphs/quarterMeetings');
+  quarterMeetings = require('./routes/d3Graphs/quarterMeetings'),
+  user = require('./routes/user');
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -57,6 +58,9 @@ app.get('/moreDetailsHistory/:meetingId', moreDetails.moreDetailsHistory);
 app.get('/downloadPrev/:download',moreDetails.downloadPrev);
 app.get('/quarterMeetings/:quarterDates',quarterMeetings.quarterMeetingsData);
 app.get('/isAdminUser/:userId',authorization.postAuthorization);
+app.post('/createUser', user.createUser);
+app.get('/getUserRoles', user.getUserRoles);
+app.put('/checkUsername', user.checkUsername);
 
 app.get('/actionDiscussion/:meetingId', actionDiscussion.actionDiscussion);
 app.post('/discussionPoints', actionDiscussion.discussionPoints);
